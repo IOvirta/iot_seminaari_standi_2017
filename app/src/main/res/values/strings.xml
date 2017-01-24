@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">iot_kamera_sovellus</string>
+    <string name="action_settings">Settings</string>
+</resources>

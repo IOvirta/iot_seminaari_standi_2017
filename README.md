@@ -1,0 +1,1 @@
+# iot_seminaari_standi_2017

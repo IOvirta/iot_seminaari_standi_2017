@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 		//Muutetaan io_service tcp resolveriksi
 		tcp::resolver resolver(io_service);
 		//Query object -> list of endpoints ???
-		tcp::resolver::query query(argv[1], "daytime");		
+		tcp::resolver::query query(argv[1], "7771");		
 		tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 		
 		//Luodaan ja yhdistetään socket
@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 		
 		for (;;)
 		{
+			
 			//Luodaan puskuri sisältämään viestit
 			boost::array<char, 128> buf;
 			boost::system::error_code error;
@@ -47,6 +48,10 @@ int main(int argc, char* argv[])
 			std::cout << "####Start of message:####\n";
 			std::cout.write(buf.data(), len);
 			std::cout << "####End of message#######\n";
+			
+			//t::asio::write(*sock, boost::asio::buffer(fullData, sizeof(fullData)));
+			std::string data = "data";
+			boost::asio::write(socket, boost::asio::buffer(data, sizeof(data)) );
 		}
 	}
 	catch (std::exception& e)

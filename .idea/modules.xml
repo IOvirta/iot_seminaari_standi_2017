@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/iot_kamera_sovellus.iml" filepath="$PROJECT_DIR$/iot_kamera_sovellus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iot_seminaari_standi_2017_1.iml" filepath="$PROJECT_DIR$/iot_seminaari_standi_2017_1.iml" />
     </modules>
   </component>
 </project>

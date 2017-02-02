@@ -40,13 +40,21 @@ private:
 class tcp_server
 {
 public:
+	//Constructor alustaa acceptorin kuuntelemaan porttia 13,
+	//sekä kutsuu start_accept metodia.
 	tcp_server(boost::asio::io_service& io_service);
 	
 private:
+
+	//Luo socketin ja aloittaa asynkronisen accept operaation.
 	void start_accept();
 	
-	void handle_accept(tcp_connection::pointer new_connection, const boost::system::error_code& error);
+	//Kutsutaan kun acceptor vastaanottaa yhteyden clientiltä
+	//Luo uuden tcp_connection yhteyden
+	void handle_accept(tcp_connection::pointer new_connection,
+		const boost::system::error_code& error);
 	
+	//Asion oma luokka..
 	tcp::acceptor acceptor_;
 };
 

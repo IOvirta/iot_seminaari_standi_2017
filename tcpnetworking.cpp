@@ -16,16 +16,17 @@ tcp::socket& tcp_connection::socket()
 void tcp_connection::start()
 {
 	std::cout << "Incoming connection.\n";
-	message_ = "Current server configuration:11001001000100\n";
+	std::cout << "Sending server configuration info to client:\n";
+	message_ = "TemplateConfigurationInfo777";
 	boost::asio::async_write(socket_, boost::asio::buffer(message_),
 		boost::bind(&tcp_connection::handle_write, shared_from_this(), 
 			boost::asio::placeholders::error,
 			boost::asio::placeholders::bytes_transferred));
 			
-	std::cout << "Sent data to client.\n";
+	std::cout << "..data sent.\n";
 			
 	//#####Lukutesti#####
-	//Luodaan puskuri sisältämään viestit
+	//Luodaan puskuri sisältämään vastaanotettava viesti
 	boost::array<char, 128> buf;
 	boost::system::error_code error;
 	

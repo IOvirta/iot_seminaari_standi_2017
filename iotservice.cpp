@@ -1,6 +1,10 @@
 #include "tcpnetworking.cpp"
 #include <boost/asio.hpp>
 
+struct conf{
+	//True = Lähetetään videota udp-pitkin kännykän ip:een.
+	bool enable_video_transmit = false;
+}
   
 int main()
 {

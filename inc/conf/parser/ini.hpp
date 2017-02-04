@@ -18,6 +18,8 @@ public:
 
     void parse_configuration_file(tree::Tree<> &tree)
     {
+        
+        // TODO: stripata stringit
         auto lines = read_lines();
         tree::Node<> *section = nullptr;
         /* [section]

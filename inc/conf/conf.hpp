@@ -2,7 +2,6 @@
 #define IOVIRTA_IOT_CONF_CONF_HPP
 
 #include <string>
-#include <utility>
 #include <vector>
 #include <type_traits>
 #include <sstream>
@@ -39,6 +38,7 @@ public:
     Configuration(const std::string &conf_file) : Configuration(conf_file, std::vector<std::string>()) {}
     Configuration(const std::string &conf_file, const std::vector<std::string> &args) : conf_file_(conf_file)
     {
+        // TODO args
         if (!read_configuration_file())
         {} // throw
     }
@@ -52,6 +52,7 @@ public:
     {
         return detail::string_to_int<T>(config_data_.get(path...));
     }
+
 
     template <typename T, typename... Path>
     typename std::enable_if<std::is_same<T, std::string>::value, T>::type get(Path... path)

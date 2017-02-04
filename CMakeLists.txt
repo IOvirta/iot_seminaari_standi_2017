@@ -5,5 +5,8 @@ include_directories(inc)
 
 set(SOURCES src/main.cpp src/conf/conf.cpp)
 
+find_package(OpenCV REQUIRED)
+
 add_executable(iovirta_iot ${SOURCES})
+target_link_libraries(iovirta_iot ${OpenCV_LIBS})
 set_property(TARGET iovirta_iot PROPERTY CXX_STANDARD 14)

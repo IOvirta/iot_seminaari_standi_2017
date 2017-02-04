@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <functional>
-#include <iostream>
+
+
 namespace iovirta_iot
 {
 namespace tree

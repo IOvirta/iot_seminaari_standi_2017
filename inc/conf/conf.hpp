@@ -5,9 +5,10 @@
 #include <vector>
 #include <type_traits>
 #include <sstream>
-//#include <iostream>
-#include "tree.hpp"
+#include <functional>
 
+#include "tree.hpp"
+#include <iostream>
 namespace iovirta_iot
 {
 namespace conf
@@ -23,6 +24,11 @@ T string_to_int(const std::string &string)
     ss >> ret;
     return ret;
 }
+
+template <typename T>
+struct is_vector : std::false_type {};
+template <typename T>
+struct is_vector<std::vector<T>> : std::true_type {};
 } // namespace detail
 
 class Configuration
@@ -45,20 +51,61 @@ public:
     ~Configuration() {}
     // TODO: rule of 5
 
-    //template <typename T, typename... Path, typename = std::enable_if<std::is_arithmetic<T>::value>>
+    // get<arimethic type>(..)
     template <typename T, typename... Path>
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type
     get(Path... path)
     {
-        return detail::string_to_int<T>(config_data_.get(path...));
+        return detail::string_to_int<T>(config_data_.get(path...)->value);
     }
 
-
+    // get<std::string>(..)
     template <typename T, typename... Path>
     typename std::enable_if<std::is_same<T, std::string>::value, T>::type get(Path... path)
     {
-        return config_data_.get(path...);
+        return config_data_.get(path...)->value;
     }
+
+    // get<std::vector<arimethic type>>(..)
+    template <typename T, typename... Path>
+    typename std::enable_if<detail::is_vector<T>::value && std::is_arithmetic<typename T::value_type>::value, T>::type get(Path... path)
+    {
+        std::vector<std::string> values_str = get<std::vector<std::string>>(path...);
+
+        T values;
+        for (auto &v : values_str)
+            values.push_back(detail::string_to_int<typename T::value_type>(v));
+
+        return values;
+    }
+
+    // get<std::vector<std::string>>(..)
+    template <typename T, typename... Path>
+    typename std::enable_if<std::is_same<T, std::vector<std::string>>::value, T>::type get(Path... path)
+    {
+        T values;
+        tree::Node<> *root = config_data_.get(path...);
+
+        /* TODO: kaikkien lasten arvot */
+        std::function<void(tree::Node<>*)> get_values = [&get_values, &values] (tree::Node<> *node)
+        {
+            for (auto it = node->childs.begin(); it != node->childs.end(); ++it)
+            {
+                values.push_back((*it)->value);
+
+                if ((*it)->childs.size() != 0)
+                    get_values(*it);
+            }
+        };
+
+        get_values(root);
+
+
+        return values;
+    }
+
+    // get<std::vector<Item<K, V>>>(..)
+    // TODO
 
 }; // class Configuration
 } // namespace conf

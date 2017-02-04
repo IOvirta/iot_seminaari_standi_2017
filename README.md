@@ -1,12 +1,11 @@
 # IOT-standi Serverisovellus
-----------------------------------------------------------
-# build
+##build
+```
 cd bin
 cmake ..
 make
-----------------------------------------------------------
-./iovirta_iot
-----------------------------------------------------------
+```
+
 iotservice.cpp - pääkoodi
 
 tcpnetworking.cpp/h - tcp liikenne, asetusten haku ja tietojen vienti

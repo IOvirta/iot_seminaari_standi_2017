@@ -51,7 +51,7 @@ public:
     ~Configuration() {}
     // TODO: rule of 5
 
-    // get<arimethic type>(..)
+    // get<arithmetic type>(..)
     template <typename T, typename... Path>
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type
     get(Path... path)
@@ -66,7 +66,7 @@ public:
         return config_data_.get(path...)->value;
     }
 
-    // get<std::vector<arimethic type>>(..)
+    // get<std::vector<arithmetic type>>(..)
     template <typename T, typename... Path>
     typename std::enable_if<detail::is_vector<T>::value && std::is_arithmetic<typename T::value_type>::value, T>::type get(Path... path)
     {
@@ -86,7 +86,6 @@ public:
         T values;
         tree::Node<> *root = config_data_.get(path...);
 
-        /* TODO: kaikkien lasten arvot */
         std::function<void(tree::Node<>*)> get_values = [&get_values, &values] (tree::Node<> *node)
         {
             for (auto it = node->childs.begin(); it != node->childs.end(); ++it)

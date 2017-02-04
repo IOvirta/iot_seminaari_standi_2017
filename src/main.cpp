@@ -19,43 +19,56 @@ int main(int argc, char **argv)
     }
 
     iovirta_iot::conf::Configuration conf(argv[1]);
-    
-    std::vector<iovirta_iot::video::Camera> cameras;
 
-    for (auto &i : conf.get<std::vector<std::string>>("camera"))
+    iovirta_iot::video::Camera camera;
+    if (!iovirta_iot::video::open_camera(conf.get<int>("camera0", "id"), camera))
     {
-        auto id = conf.get<int>(i, "id");
-        iovirta_iot::video::Camera cam;
-        if (iovirta_iot::video::open_camera(id, cam))
-            cameras.push_back(cam);
-        else
-            std::cerr << "kameraa camera" << id << " ei saatu auki" << std::endl;
+        return 1;
     }
 
+    /* kameran asetukset */
+    camera.set_width(conf.get<int>("camera0", "width"));
+    camera.set_height(conf.get<int>("camera0", "height"));
 
-    /* kameroiden asetukset */
-    for (auto &cam : cameras)
-    {
-        auto cam_str = "camera" + std::to_string(cam.id);
-        cam.set_width(conf.get<int>(cam_str, "width"));
-        cam.set_height(conf.get<int>(cam_str, "height"));
-    }
-
-
+    // v--------- aikanaan poistuu
     if (conf.get<bool>("test", "nayta"))
         cv::namedWindow("frame");
 
-    // while (käynnissä olo ehto)
+    // while (?)
     for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
     {
-        for (auto &cam : cameras)
-            if (!iovirta_iot::video::capture_frame(cam))
-                { /*TODO*/}
+        if (!iovirta_iot::video::capture_frame(camera))
+        { /* ei saatu kuvaa */ }
+
+        //if (iovirta_iot::video::check_motion(camera))
+        {
+            /*  jos edellisellä framella ei ollut liikettä lähetetään puhelimelle
+                ilmotus ja avataan tiedosto tallentamista vartern
+                encoder.open_file(xxx.zzz);
+            */
+        }
+        /*
+        else
+        {
+            jos viime framella oli liikettä pistetään kello pyöriin
+            muuten katotaan onko kello pöyriny x aikaa ja jos on
+            niin pistetää tiedosto kii
+            enoder.close_file();
+        }
+
+        if (puhelin pyytänyt kuvaa || kamerassa liikettä)
+        {
+            xxx = encoder.encode_frame(camera.frame);
+
+            if (pyydetty puhelimelta)
+                video_streamer.send_frame(camera.frame);
+        }
+        */
 
 
-
+        // v---- aikanaan poistuu
         if (conf.get<bool>("test", "nayta"))
-            cv::imshow("frame", cameras[0].frame);
+            cv::imshow("frame", camera.frame);
 
         cv::waitKey(1);
     }

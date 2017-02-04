@@ -99,18 +99,18 @@ public:
         throw std::runtime_error("Tree: invalid child");
     }
 
-    ValueType get(Node<KeyType, ValueType> *node, KeyType name) const
+    Node<KeyType, ValueType> *get(Node<KeyType, ValueType> *node, KeyType name) const
     {
         if (has_child(node, name))
-            return get_child(node, name)->value;
+            return get_child(node, name);
         if (node->name == name)
-            return node->value;
+            return node;
 
         throw std::runtime_error("Tree: invalid path2");
     }
 
     template <typename... Path>
-    ValueType get(Node<KeyType, ValueType> *node, KeyType name, Path... path) const
+    Node<KeyType, ValueType> *get(Node<KeyType, ValueType> *node, KeyType name, Path... path) const
     {
         if (has_child(node, name))
             return get(get_child(node, name), path...);
@@ -130,7 +130,7 @@ public:
     }*/
 
     template <typename... Path>
-    ValueType get(KeyType name, Path... path) const
+    Node<KeyType, ValueType> *get(KeyType name, Path... path) const
     {
         return get(root_node_, name, path...);
     }

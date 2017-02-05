@@ -25,6 +25,9 @@ struct Camera
     {
         cap.set(CV_CAP_PROP_FRAME_HEIGHT, height);
     }
+
+    int get_width() { return cap.get(CV_CAP_PROP_FRAME_WIDTH); }
+    int get_height() { return cap.get(CV_CAP_PROP_FRAME_HEIGHT); }
 }; // struct Camera
 
 bool open_camera(int id, Camera &cam);

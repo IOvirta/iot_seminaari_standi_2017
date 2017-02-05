@@ -1,3 +1,7 @@
+/* TODO Configuration::set()
+        save()
+*/
+
 #ifndef IOVIRTA_IOT_CONF_CONF_HPP
 #define IOVIRTA_IOT_CONF_CONF_HPP
 
@@ -13,6 +17,15 @@ namespace iovirta_iot
 {
 namespace conf
 {
+template <typename ValueType = std::string>
+struct Item
+{
+    std::string name;
+    ValueType value;
+
+    typedef ValueType value_type;
+}; // struct Item
+
 namespace detail
 {
 template <typename T, typename = std::enable_if<std::is_arithmetic<T>::value>>
@@ -29,6 +42,11 @@ template <typename T>
 struct is_vector : std::false_type {};
 template <typename T>
 struct is_vector<std::vector<T>> : std::true_type {};
+
+template <typename T>
+struct is_item : std::false_type {};
+template <typename T>
+struct is_item<Item<T>> : std::true_type {};
 } // namespace detail
 
 class Configuration
@@ -51,10 +69,27 @@ public:
     ~Configuration() {}
     // TODO: rule of 5
 
+    // get<Item<std::string>>(..)
+    template <typename T, typename... Path>
+    typename std::enable_if<detail::is_item<T>::value && std::is_arithmetic<typename T::value_type>::value, T>::type get(Path... path)
+    {
+        auto i = config_data_.get(path...);
+
+        return {i->name, detail::string_to_int<typename T::value_type>(i->value)};
+    }
+
+    // get<Item<arithmetic type>(..)
+    template <typename T, typename... Path>
+    typename std::enable_if<std::is_same<T, Item<std::string>>::value, T>::type get(Path... path)
+    {
+        auto i = config_data_.get(path...);
+
+        return {i->name, i->value};
+    }
+
     // get<arithmetic type>(..)
     template <typename T, typename... Path>
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type
-    get(Path... path)
+    typename std::enable_if<std::is_arithmetic<T>::value, T>::type get(Path... path)
     {
         return detail::string_to_int<T>(config_data_.get(path...)->value);
     }

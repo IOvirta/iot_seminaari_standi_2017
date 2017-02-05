@@ -11,8 +11,7 @@
 #include "video/motion.hpp"
 #include "video/encoder.hpp"
 #include "network/video_streamer.hpp"
-#include "network/tcp_server.hpp"
-#include "network/fcm_server.hpp" //?
+#include "network/fcm_server.hpp"
 
 
 int main(int argc, char **argv)
@@ -39,11 +38,11 @@ int main(int argc, char **argv)
 
     /* tai joku muu --v, esim std::bitset */
     std::atomic<std::uint8_t> flags;
-    iovirta_iot::network::TCPServer tcp_server(conf.get<int>("tcp", "port") /*etc*, flags*/);
-    /*std::thread tcpserver_thread(&iovirta....::TCPServer::start, tcp_server, std::ref(flags));*/
+
     iovirta_iot::network::VideoStreamer streamer/*(...)*/;
     /*std::thread ....*/
-    iovirta_iot::network::FCMServer fcm_server/*(....)*/;
+    iovirta_iot::network::FCMServer fcm_server/*()
+    std::thread ....., std::ref(flags));*/;
 
     // v--------- aikanaan poistuu
     if (conf.get<bool>("test", "nayta"))

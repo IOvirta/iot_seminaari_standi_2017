@@ -12,6 +12,7 @@
 #include "video/encoder.hpp"
 #include "network/video_streamer.hpp"
 #include "network/fcm_server.hpp"
+#include "boost/asio.hpp"
 
 
 int main(int argc, char **argv)
@@ -62,7 +63,7 @@ int main(int argc, char **argv)
                 ilmotus ja avataan tiedosto tallentamista vartern*/
             if (!movement)
             {
-                fcm_server.send(/* kenelle lähetetään, mitä läheteään*/);
+                //fcm_server.send(/* kenelle lähetetään, mitä läheteään*/);
                 encoder.open_file("" /*kenties xxx_yymmdd_hhmmss.pääte?*/);
                 movement = true;
             }
@@ -103,6 +104,20 @@ int main(int argc, char **argv)
     }
 
     /* threadien pysytykset yms*/
+    
+    iovirta_iot::network::FCMServer fcmserver = iovirta_iot::network::FCMServer();
+    
+	try
+	{
+		boost::asio::io_service io_service;
+		//io_service.run();
+		fcmserver.send(io_service);
+		std::cout << "Script completed\n";
+	}
+	catch(std::exception& e){
+		std::cerr << e.what() << std::endl;
+		std::cout << "error\n";
+	}
 
     return 0;
 }

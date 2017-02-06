@@ -3,7 +3,7 @@ project(iovirta_iot_serveri)
 
 include_directories(inc)
 
-set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp src/video/motion.cpp)
+set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp src/video/motion.cpp src/network/fcm_server.cpp)
 
 find_package(OpenCV REQUIRED)
 

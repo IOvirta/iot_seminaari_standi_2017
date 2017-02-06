@@ -6,6 +6,7 @@
 #include <string>
 #include <boost/asio.hpp>
 #include <sstream>
+#include <boost/asio/ssl.hpp>
 
 namespace iovirta_iot
 {

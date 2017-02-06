@@ -2,15 +2,39 @@
 
 using namespace iovirta_iot::network;
 
+using boost::asio::ip::tcp;
+namespace ssl = boost::asio::ssl;
+typedef ssl::stream<tcp::socket> ssl_socket;
+
 void FCMServer::send(boost::asio::io_service & io_service){
-	// Get a list of endpoints corresponding to the server name.
+	
+	// Create a context that uses the default paths for
+	// finding CA certificates.
+	ssl::context ctx(ssl::context::sslv23);
+	ctx.set_default_verify_paths();
+
+	
+	//Avataan ssl socket yhteys
+	ssl_socket sock(io_service, ctx);
 	tcp::resolver resolver(io_service);
-	tcp::resolver::query query("fcm.googleapis.com", "443", boost::asio::ip::resolver_query_base::numeric_service);
+	tcp::resolver::query query("fcm.googleapis.com", "https");
+	
+	boost::asio::connect(sock.lowest_layer(), resolver.resolve(query));
+	sock.lowest_layer().set_option(tcp::no_delay(true));
+
+	// Perform SSL handshake and verify the remote host's
+	// certificate.
+	sock.set_verify_mode(ssl::verify_peer);
+	sock.set_verify_callback(ssl::rfc2818_verification("fcm.googleapis.com"));
+	sock.handshake(ssl_socket::client);
+	
+	/*###OLD METHOD ###
 	//tcp::resolver::query query("127.0.0.1", "http");
-	tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
+	 * tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 	// Try each endpoint until we successfully establish a connection.
 	tcp::socket socket(io_service);
 	boost::asio::connect(socket, endpoint_iterator);
+	* #################*/
 	
 	// Form the request. We specify the "Connection: close" header so that the
 	// server will close the socket after transmitting the response. This will
@@ -32,5 +56,5 @@ void FCMServer::send(boost::asio::io_service & io_service){
 	request_stream << jsontemp.str();
 
 	// Send the request.
-	boost::asio::write(socket, request);
+	boost::asio::write(sock, request);
 }

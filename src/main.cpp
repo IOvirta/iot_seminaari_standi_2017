@@ -6,13 +6,14 @@
 
 #include <opencv2/highgui/highgui.hpp> // tulee poistumaan
 
+#include <asio.hpp>
+
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
 #include "video/motion.hpp"
 #include "video/encoder.hpp"
 #include "network/video_streamer.hpp"
 #include "network/fcm_server.hpp"
-#include "boost/asio.hpp"
 
 
 int main(int argc, char **argv)
@@ -104,12 +105,12 @@ int main(int argc, char **argv)
     }
 
     /* threadien pysytykset yms*/
-    
+
     iovirta_iot::network::FCMServer fcmserver = iovirta_iot::network::FCMServer();
-    
+
 	try
 	{
-		boost::asio::io_service io_service;
+		asio::io_service io_service;
 		//io_service.run();
 		fcmserver.send(io_service);
 		std::cout << "Script completed\n";

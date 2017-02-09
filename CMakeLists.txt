@@ -3,10 +3,10 @@ project(iovirta_iot_serveri)
 
 include_directories(inc)
 
-set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp src/video/motion.cpp)
+set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp src/video/encoder.cpp)
 
 find_package(OpenCV REQUIRED)
 
 add_executable(iovirta_iot ${SOURCES})
-target_link_libraries(iovirta_iot ${OpenCV_LIBS})
+target_link_libraries(iovirta_iot ${OpenCV_LIBS} avcodec)
 set_property(TARGET iovirta_iot PROPERTY CXX_STANDARD 14)

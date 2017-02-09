@@ -1,17 +1,14 @@
+#include <opencv2/opencv.hpp>
+
 #include "video/camera.hpp"
 
-using namespace iovirta_iot;
 
-bool video::open_camera(int id, Camera &cam)
+bool iovirta_iot::video::Camera::capture_frame()
 {
-    auto ret = cam.cap.open(id);
-    if (ret)
-        cam.id = id;
-
-    return ret;
+    return video_in.read(frame_);
 }
 
-bool video::capture_frame(Camera &cam)
+bool iovirta_iot::video::Camera::check_motion()
 {
-    return cam.cap.read(cam.frame);
+    return false;
 }

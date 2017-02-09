@@ -7,7 +7,11 @@ namespace network
 {
 class VideoStreamer
 {
-    
+public:
+    VideoStreamer() {}
+    ~VideoStreamer() {}
+    VideoStreamer(const VideoStreamer&) = delete;
+    VideoStreamer(VideoStreamer &&) = delete;
 }; // class VideoStreamer
 } // namespace network
 } // namespace iovirta_iot

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "596859909382",
+    "firebase_url": "https://dhurr-bd7cf.firebaseio.com",
+    "project_id": "dhurr-bd7cf",
+    "storage_bucket": "dhurr-bd7cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596859909382:android:2391db81eec57142",
+        "android_client_info": {
+          "package_name": "com.iovirta.iot_kamera_sovellus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596859909382-1ouel0oif5c2r5tmev20gmgngm0521pt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtDTt5HbF1dXbM-h0PpY4oIvTxvuVIPCU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

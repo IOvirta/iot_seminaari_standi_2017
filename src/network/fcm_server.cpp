@@ -52,7 +52,7 @@ void FCMServer::send(){
     "notification" : {
       "body" : "Message passed through. Good job.",
       "title" : "Hello commander o7",
-      "icon" : "myicon"
+			"data" : {"lawl:1337"}
     }
   }'"';
 

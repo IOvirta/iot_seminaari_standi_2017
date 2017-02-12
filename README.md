@@ -11,6 +11,13 @@ OpenSSL
 sudo apt-get install libssl-dev
 ```
 
+ASIO
+```
+http://think-async.com/Asio/Download
+-TAI-
+sudo apt-get install libasio-dev
+```
+
 ##build
 ```
 cd bin

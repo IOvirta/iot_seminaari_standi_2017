@@ -16,9 +16,17 @@ namespace network
 using asio::ip::tcp;
 
 class FCMServer
+
 {
 public:
-    void send(asio::io_service & io_service);
+
+    //Luodaan luokkakonstruktorissa
+    asio::io_service * io_service;
+    //TODO: Kirjoita kirjoita destructor, ettei muisti vuoda
+
+    FCMServer();
+
+    void send();
 }; // class FCMServer
 } // namespace network
 } // namespace iovirta_iot

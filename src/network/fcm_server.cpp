@@ -6,7 +6,11 @@ using asio::ip::tcp;
 namespace ssl = asio::ssl;
 typedef ssl::stream<tcp::socket> ssl_socket;
 
-void FCMServer::send(asio::io_service & io_service){
+FCMServer::FCMServer(){
+	io_service = new asio::io_service();
+}
+
+void FCMServer::send(){
 
 	// Create a context that uses the default paths for
 	// finding CA certificates.
@@ -15,8 +19,8 @@ void FCMServer::send(asio::io_service & io_service){
 
 
 	//Avataan ssl socket yhteys
-	ssl_socket sock(io_service, ctx);
-	tcp::resolver resolver(io_service);
+	ssl_socket sock((*io_service), ctx);
+	tcp::resolver resolver((*io_service));
 	tcp::resolver::query query("fcm.googleapis.com", "https");
 
 	asio::connect(sock.lowest_layer(), resolver.resolve(query));
@@ -43,7 +47,14 @@ void FCMServer::send(asio::io_service & io_service){
 	std::ostream request_stream(&request);
 
 	std::stringstream jsontemp;
-	jsontemp << "{ \"to\" : \"bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1\" }";
+	jsontemp << '"'{
+    "to" : "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...",
+    "notification" : {
+      "body" : "Message passed through. Good job.",
+      "title" : "Hello commander o7",
+      "icon" : "myicon"
+    }
+  }'"';
 
 	request_stream << "POST /fcm/send HTTP/1.1 \r\n";
 	request_stream << "Host:" << "derp" << "\r\n";

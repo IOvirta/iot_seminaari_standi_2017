@@ -110,9 +110,8 @@ int main(int argc, char **argv)
 
 	try
 	{
-		asio::io_service io_service;
 		//io_service.run();
-		fcmserver.send(io_service);
+		fcmserver.send();
 		std::cout << "Script completed\n";
 	}
 	catch(std::exception& e){

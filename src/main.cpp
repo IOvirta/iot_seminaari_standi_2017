@@ -1,6 +1,5 @@
 #include <iostream>
 #include <atomic>
-//#include <thread>
 #include <chrono>
 
 
@@ -8,7 +7,6 @@
 
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
-#include "video/encoder.hpp"
 #include "network/video_streamer.hpp"
 #include "network/fcm_server.hpp"
 
@@ -27,14 +25,9 @@ int main(int argc, char **argv)
         conf.get<int>("camera0", "width"), conf.get<int>("camera0", "height"));
 
 
-    //iovirta_iot::video::Encoder::register_codecs();
-    //iovirta_iot::video::Encoder encoder(conf.get<std::string>("video", "codec"), camera.get_width(), camera.get_height());
+    iovirta_iot::network::VideoStreamer streamer(conf.get<int>("iv", "port"));
+    streamer.start();
 
-    /* tai joku muu --v, esim std::bitset */
-    std::atomic<std::uint8_t> flags;
-
-    iovirta_iot::network::VideoStreamer streamer/*(...)*/;
-    /*std::thread ....*/
     iovirta_iot::network::FCMServer fcm_server/*()
     std::thread ....., std::ref(flags));*/;
 
@@ -45,57 +38,40 @@ int main(int argc, char **argv)
     bool movement = false;
     std::chrono::time_point<std::chrono::steady_clock> movement_stop_time;
     // while (flags & run)
-    for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
+    //for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
+    while(true)
     {
         if (!camera.capture_frame())
         { /* ei saatu kuvaa */ }
-        // TODO: aika tarkastukset kokonaan motion_detectoriin, paitsi loppuaika
+
         if (camera.check_motion())
         {
-            /*  jos edellisellä framella ei ollut liikettä lähetetään puhelimelle
-                ilmotus ja avataan tiedosto tallentamista vartern*
-            //    fcm_server.send(/* kenelle lähetetään, mitä läheteään*/
-            //    encoder.open_file("" /*kenties xxx_yymmdd_hhmmss.pääte?*/);
+            if (!movement)
+            {
+                // liike alkoi, ilmotus puhelimelle
+                movement = true;
+            }
         }
         else
         {
-            /*jos viime framella oli liikettä pistetään kello pyöriin
-            muuten katotaan onko kello pöyriny x aikaa ja jos on
-            niin pistetää tiedosto kii
-
-            eli siis tallennetaan tiedostoon vielä x aikaa liikkeen loppumisen jälkee*/
             if (movement)
             {
-                movement_stop_time = std::chrono::steady_clock::now();
+                // liike loppui
                 movement = false;
             }
-            else
-            {
-                auto time_elapsed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - movement_stop_time);
-                if (time_elapsed > std::chrono::seconds(2/* confista hakee oikeesti*/))
-                ;//    encoder.close_file();
-            }
         }
 
-        //if (puhelin pyytänyt kuvaa || kamerassa liikettä)
-        if (flags & 1/*ei oikeesti 1 mut joku muu arvo, esim laheta_kuvaa*/ || movement)
-        {
-            //auto encoded_frame = encoder.encode_frame(/*camera.frame*/);
-
-            //if (pyydetty puhelimelta, eli siis sama ku tuo flags & )
-            //    streamer.send_frame(camera.frame);
-        }
-
-
+        streamer.send(camera.frame_);
 
         // v---- aikanaan poistuu
         if (conf.get<bool>("test", "nayta"))
             cv::imshow("frame", camera.frame_);
 
-        cv::waitKey(1);
+        if (cv::waitKey(1) == 'q')
+            break;
     }
 
-    /* threadien pysytykset yms*/
+    streamer.stop();
 
     return 0;
 }

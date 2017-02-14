@@ -5,16 +5,8 @@ OpenCv. Installation: http://docs.opencv.org/2.4/doc/tutorials/introduction/linu
 
 ##build
 ```
-cd bin
+cd build
 cmake ..
 make
 ```
 
-iotservice.cpp - pääkoodi
-
-tcpnetworking.cpp/h - tcp liikenne, asetusten haku ja tietojen vienti
-android-sovellukseen
-
-videohandler.cpp/h - ohjaa kameraa, liikkeentunnistusta ja striimaamista(?)
-
-Koodissa kommentoinnit pääsääntöisesti header tiedostoissa.

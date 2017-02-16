@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,5 +26,8 @@ public class VideShow extends AppCompatActivity {
 
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_vide_show);
         layout.addView(textView);
+
+        WebView browser = (WebView) findViewById(R.id.webview);
+        browser.loadUrl("http://bjuutro.dy.fi:8080/video.html");
     }
 }

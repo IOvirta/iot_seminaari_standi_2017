@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "596859909382-kktfqapvf9oqsih7ubt950u0pi7nt5hc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iovirta.iot_kamera_sovellus",
+            "certificate_hash": "C0622B59C141A8569B573D69415DEBA0E91A027F"
+          }
+        },
+        {
           "client_id": "596859909382-9194trv3lenh3obf1qmdmjpee3t209l4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

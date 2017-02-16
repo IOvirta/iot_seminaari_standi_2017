@@ -1,15 +1,27 @@
 package com.iovirta.iot_kamera_sovellus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.LogPrinter;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public final static String EXTRA_MESSAGE = "com.iovirta.iot_kamera_sovellus.MESSAGE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +38,27 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        SetText("derp");
+        Log.i("derp",  "daaa___");
+
+    }
+
+    /** Called when the user clicks the Send button */
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, VideShow.class);
+        TextView editText = (TextView) findViewById(R.id.teksti);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+
+    }
+
+
+
+    public void SetText(String st){
+        TextView view = (TextView)findViewById(R.id.teksti);
+        view.setText(st);
     }
 
     @Override

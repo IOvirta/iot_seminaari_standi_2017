@@ -5,52 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.iovirta.iot_kamera_sovellus.MainActivity">
+    tools:context="com.iovirta.iot_kamera_sovellus.MainActivity"
+    android:background="@color/Make_it_blackey">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:layout_height="wrap_content">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <include layout="@layout/content_main"
-        android:id="@+id/include" />
+        </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="120dp"
-        android:layout_height="125dp"
-        android:id="@+id/teksti"
-        tools:text="fdgsfsfsdf"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center_vertical|left"
-        android:layout_gravity="center_vertical|right" />
+            <TextView
+                android:text="@string/mainactivity_headertext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                tools:text="@string/mainactivity_headertext"
+                android:typeface="normal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textSize="24sp"
+                tools:textColor="?android:attr/textColorSearchUrl"
+                android:textColor="@android:color/holo_blue_light"
+                android:textAlignment="center" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_send"
-        android:onClick="sendMessage"
-        app:layout_anchor="@+id/include"
-        android:id="@+id/button2"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_send"
+                android:onClick="sendMessage (MainActivity)"
+                app:layout_anchor="@+id/include"
+                android:id="@+id/button2"
+                app:layout_anchorGravity="center_vertical|center_horizontal"
+                android:layout_gravity="center_vertical|center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_launch_mediView"
+                android:onClick="openMediaView"
+                android:id="@+id/media_button"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -16,12 +16,16 @@
 
 package com.iovirta.iot_kamera_sovellus;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import static com.iovirta.iot_kamera_sovellus.MainActivity.EXTRA_MESSAGE;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -36,20 +40,37 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
+        Log.w("derp", "Refreshed token: ");
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
-        Log.println(Log.DEBUG, "durr",  refreshedToken);
-        Log.println(Log.DEBUG, "durr",  "derpaherp");
+        Log.w("derp", "_Refreshed token: " + refreshedToken);
 
-        MainActivity mActivity = new MainActivity();
-        mActivity.SetText(refreshedToken);
+
+
+        // 1. create an intent pass class name or intnet action name
+        Intent intent = new Intent(this, MainActivity.class);
+
+        // 2. put key/value data
+        intent.putExtra("token", refreshedToken);
+
+        // 3. or you can add data to a bundle
+        Bundle extras = new Bundle();
+        extras.putString("token2", refreshedToken);
+
+        // 4. add bundle to intent
+        intent.putExtras(extras);
+
+        // 5. start the activity
+        startActivity(intent);
+
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
+        //sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]
+
+
 
     /**
      * Persist token to third-party servers.

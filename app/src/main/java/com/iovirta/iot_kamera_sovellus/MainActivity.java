@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceIdService;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,36 +28,35 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
-        SetText("derp");
-        Log.i("derp",  "daaa___");
+        Intent intent = getIntent();
+        //String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        //EditText tokeniField = (EditText) findViewById(R.id.tokeni);
+        //TextView textView = new TextView(this);
+        //tokeniField.setTextSize(40);
+        //tokeniField.setText(message);
+
 
     }
 
     /** Called when the user clicks the Send button */
     public void sendMessage(View view) {
         Intent intent = new Intent(this, VideShow.class);
-        TextView editText = (TextView) findViewById(R.id.teksti);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        //TextView editText = (TextView) findViewById(R.id.teksti);
+        //String message = editText.getText().toString();
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+
+    }
+    /** Called when the user clicks the Send button */
+    public void openMediaView(View view) {
+        Intent intent = new Intent(this, mediaView.class);
         startActivity(intent);
 
     }
 
 
 
-    public void SetText(String st){
-        TextView view = (TextView)findViewById(R.id.teksti);
-        view.setText(st);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

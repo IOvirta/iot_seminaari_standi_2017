@@ -21,11 +21,14 @@ class FCMServer
 public:
 
     //Luodaan luokkakonstruktorissa
-    asio::io_service * io_service;
-    //TODO: Kirjoita kirjoita destructor, ettei muisti vuoda
+    asio::io_service * io_service = nullptr;
 
     FCMServer();
-
+    ~FCMServer() 
+    {
+        if (io_service != nullptr)
+            delete io_service;
+    }
     void send();
 }; // class FCMServer
 } // namespace network

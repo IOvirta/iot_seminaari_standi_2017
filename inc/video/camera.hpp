@@ -28,6 +28,8 @@ public:
     }
     bool capture_frame();
     bool check_motion();
+    int width() { return video_in.get(CV_CAP_PROP_FRAME_WIDTH); }
+    int height() { return video_in.get(CV_CAP_PROP_FRAME_HEIGHT); }
 }; // class Camera
 } // namespace video
 } // namespace iovirta_iot

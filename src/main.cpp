@@ -1,13 +1,9 @@
 #include <iostream>
-#include <atomic>
-#include <chrono>
 
-
-#include <opencv2/highgui/highgui.hpp> // tulee poistumaan
+#include <cstdio>
 
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
-#include "network/video_streamer.hpp"
 #include "network/fcm_server.hpp"
 
 
@@ -25,21 +21,28 @@ int main(int argc, char **argv)
         conf.get<int>("camera0", "width"), conf.get<int>("camera0", "height"));
 
 
-    iovirta_iot::network::VideoStreamer streamer(conf.get<int>("iv", "port"));
-    streamer.start();
+    iovirta_iot::network::FCMServer fcm_server; // TODO oisko tää jonku muun niminen oikeesti
 
-    iovirta_iot::network::FCMServer fcm_server/*()
-    std::thread ....., std::ref(flags));*/;
+    const char *ffmpeg_command_fmt = "ffmpeg -f rawvideo -pixel_format bgr24 -video_size %dx%d -i pipe:0 -codec:v %s -pix_fmt %s -vprofile baseline -an -f flv %s";
+    int ffmpeg_command_len = std::snprintf(nullptr, 0, ffmpeg_command_fmt, camera.width(), camera.height(),
+        conf.get<std::string>("video", "codec").c_str(), conf.get<std::string>("video", "pix_fmt").c_str(), conf.get<std::string>("video", "output").c_str());
 
-    // v--------- aikanaan poistuu
-    if (conf.get<bool>("test", "nayta"))
-        cv::namedWindow("frame");
+    std::vector<char> ffmpeg_command_buf(ffmpeg_command_len + 1);
+    std::snprintf(&ffmpeg_command_buf[0], ffmpeg_command_buf.size(), ffmpeg_command_fmt, camera.width(), camera.height(),
+        conf.get<std::string>("video", "codec").c_str(), conf.get<std::string>("video", "pix_fmt").c_str(), conf.get<std::string>("video", "output").c_str());
+
+    std::FILE *ffmpeg = popen(std::string(ffmpeg_command_buf.begin(), ffmpeg_command_buf.end()).c_str(), "w");
+    if (ffmpeg == nullptr)
+    {
+        std::cerr << "ffmpeg popen" << std::endl;
+        return 1;
+    }
 
     bool movement = false;
-    std::chrono::time_point<std::chrono::steady_clock> movement_stop_time;
-    // while (flags & run)
-    //for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
-    while(true)
+
+    int frame_size = camera.width() * camera.height() * 3;
+    //while (true)
+    for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
     {
         if (!camera.capture_frame())
         { /* ei saatu kuvaa */ }
@@ -61,17 +64,10 @@ int main(int argc, char **argv)
             }
         }
 
-        streamer.send(camera.frame_);
-
-        // v---- aikanaan poistuu
-        if (conf.get<bool>("test", "nayta"))
-            cv::imshow("frame", camera.frame_);
-
-        if (cv::waitKey(1) == 'q')
-            break;
+        fwrite(camera.frame_.data, sizeof(unsigned char), frame_size, ffmpeg);
     }
 
-    streamer.stop();
+    pclose(ffmpeg);
 
     return 0;
 }

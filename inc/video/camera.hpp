@@ -29,7 +29,7 @@ public:
         width_ = video_in.get(CV_CAP_PROP_FRAME_WIDTH);
         height_ = video_in.get(CV_CAP_PROP_FRAME_HEIGHT);
 
-        prev_gray_ = cv::Mat(height_, width_, CV_8U);
+        //prev_gray_ = cv::Mat(height_ / 2, width_, CV_8U);
     };
     ~Camera()
     {

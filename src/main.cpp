@@ -10,7 +10,6 @@
 #include "network/fcm_server.hpp"
 
 
-void check_file_events(int ifd, pollfd &pfd);
 
 int main(int argc, char **argv)
 {
@@ -53,7 +52,7 @@ int main(int argc, char **argv)
 
 
     bool movement = false;
-    cv::namedWindow("frame");
+
     int frame_size = camera.width() * camera.height() * 3;
     long long sum = 0;
     //while (true)

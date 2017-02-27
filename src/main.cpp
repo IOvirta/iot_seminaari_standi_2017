@@ -40,9 +40,9 @@ int main(int argc, char **argv)
     //{
     //    std::cerr << "ffmpeg popen" << std::endl;
     //    return 1;
-    //}
-    /*std::FILE *video_recoder = popen(conf.get<std::string>("locations", "recorder").c_str(), "w"); // onks tääki tyhmä nimi
-    if (video_recoder == nullptr)
+    //}             vconcatille -i kansio_missä_videot ja -o kansio_mihin_videot
+    /*std::FILE *vconcat = popen(conf.get<std::string>("locations", "vconcat").c_str(), "w");
+    if (vconcat == nullptr)
     {
         std::cerr << ".....todo" << std::endl;
     }*/
@@ -66,9 +66,10 @@ int main(int argc, char **argv)
         {
             if (!movement)
             {
-                // liike alkoi, ilmotus puhelimelle
+                // liike alkoi, TODO ilmotus puhelimelle
                 movement = true;
                 std::cout << "alkoi" << std::endl;
+                //std::string vconcat_add_cmd = "add "; /*+ uusin kokonainen video */
             }
         }
         else
@@ -76,6 +77,7 @@ int main(int argc, char **argv)
             if (movement)
             {
                 // liike loppui
+
                 std::cout << "loppui" << std::endl;
                 movement = false;
             }
@@ -90,10 +92,16 @@ int main(int argc, char **argv)
                 if (event.mask & IN_MODIFY)
                     ; // uus puhelin tullu, lisätään se johonki ylös että saadaan sinnekki ilmotukset lähetttyä
                 if (event.mask & IN_CREATE)
-                    ; // uus videon pätkä tullu, nimi ylös niin osataan sitten joskus tallentaa oikee video
+                {
+                    /* uus videon pätkä tullut, otetaan sen nimi ylös ja merkataan
+                       edellinen video uusimmaks (koska tää uus video ei oo vielä kokonainen)
+                     */
+                }
             }
         }
     }
+    //fwrite("quit", 1, 4, vconcat);
+    //pclose(vconcat);
     //pclose(ffmpeg);
 
     return 0;

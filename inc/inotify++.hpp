@@ -46,6 +46,7 @@ struct WatchDescriptor
     std::string name;       /* file which is monitored */
     bool is_directory;
     std::function<void(Event*)> callback;
+    uint32_t mask;
 
     WatchDescriptor() {}
     WatchDescriptor(int wd, const std::string &name) : WatchDescriptor(wd, name, nullptr) {}
@@ -58,6 +59,13 @@ struct Event
     std::string name;       /*  */
     uint32_t mask;          /* mask of events */
     uint32_t cookie;        /* unique cookie associating related events */
+    Event() : watch(-1, "") {}
+    Event(const WatchDescriptor &watch, const std::string &name, uint32_t mask, uint32_t cookie) :
+        watch(watch), name(name), mask(mask), cookie(cookie) {}
+    explicit operator bool()
+    {
+        return watch.wd >= 0;
+    }
 }; // struct Event
 
 class Inotify
@@ -103,7 +111,7 @@ private:
             inotify_event *e = (inotify_event *)&buffer_[i];
 
             WatchDescriptor wdesc = watch_descriptors_[e->wd];
-            Event event = {wdesc, "", e->mask, e->cookie};
+            Event event(wdesc, "", e->mask, e->cookie);
 
             if (e->len > 0)
                 event.name = e->name;
@@ -113,7 +121,7 @@ private:
             else
                 events_.push(event);
 
-            if (e->mask & IN_ONESHOT)
+            if (wdesc.mask & IN_ONESHOT || e->mask & IN_IGNORED)
                 watch_descriptors_.erase(e->wd);
 
             i += sizeof(inotify_event) + e->len;
@@ -173,6 +181,7 @@ public:
         std::lock_guard<std::mutex> lock(watch_descriptors_mutex_);
 #endif // INOTIFYPP_THREADS
         watch_descriptors_[wd] = WatchDescriptor(wd, name);
+        watch_descriptors_[wd].mask = mask;
 
         if (desc != nullptr)
             *desc = watch_descriptors_[wd];
@@ -200,6 +209,7 @@ public:
 
         std::lock_guard<std::mutex> lock(watch_descriptors_mutex_);
         watch_descriptors_[wd] = WatchDescriptor(wd, name, callback);
+        watch_descriptors_[wd].mask = mask;
 
         if (desc != nullptr)
             *desc = watch_descriptors_[wd];
@@ -251,18 +261,18 @@ public:
         handle_events(read(inotify_fd_, buffer_, buffer_size_));
     }
 
-    bool get_event(Event *event)
+    Event get_event()
     {
 #ifdef INOTIFYPP_THREADS
         std::lock_guard<std::mutex> lock(events_mutex_);
 #endif // INOTIFYPP_THREADS
         if (events_.empty())
-            return false;
+            return Event();
 
-        *event = events_.front();
+        Event ret = events_.front();
         events_.pop();
 
-        return true;
+        return ret;
     }
 
     std::list<WatchDescriptor> watch_list()

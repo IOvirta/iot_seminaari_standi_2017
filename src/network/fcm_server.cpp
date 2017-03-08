@@ -1,3 +1,11 @@
+#include <iostream>
+#include <ostream>
+#include <sstream>
+#include <asio/ssl.hpp>
+#include <string>
+
+#include <asio.hpp>
+
 #include "network/fcm_server.hpp"
 
 using namespace iovirta_iot::network;
@@ -7,7 +15,12 @@ namespace ssl = asio::ssl;
 typedef ssl::stream<tcp::socket> ssl_socket;
 
 FCMServer::FCMServer(){
-	io_service = new asio::io_service();
+	
+}
+
+void FCMServer::add_client(const std::string &token)
+{
+	client_tokens_.push_back(token);
 }
 
 void FCMServer::send(){
@@ -19,8 +32,8 @@ void FCMServer::send(){
 
 
 	//Avataan ssl socket yhteys
-	ssl_socket sock((*io_service), ctx);
-	tcp::resolver resolver((*io_service));
+	ssl_socket sock(io_service_, ctx);
+	tcp::resolver resolver(io_service_);
 	tcp::resolver::query query("fcm.googleapis.com", "https");
 
 	asio::connect(sock.lowest_layer(), resolver.resolve(query));

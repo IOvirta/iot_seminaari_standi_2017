@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     //pclose(vconcat);
     //pclose(ffmpeg);
 
-    iovirta_iot::network::FCMServer fcmserver = iovirta_iot::network::FCMServer();
+    iovirta_iot::network::FCMServer fcmserver;
 
 	try
 	{

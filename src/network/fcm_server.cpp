@@ -1,6 +1,5 @@
 #include <iostream>
 #include <ostream>
-#include <sstream>
 #include <asio/ssl.hpp>
 #include <string>
 
@@ -57,28 +56,31 @@ void FCMServer::send(){
 	// server will close the socket after transmitting the response. This will
 	// allow us to treat all data up until the EOF as the content.
 	asio::streambuf request;
-	std::stringstream request_string;
 	std::ostream request_stream(&request);
 
-	std::stringstream jsontemp;
-	jsontemp << "{\"data\":{\"viesti\": \"l33t\"},\"priority\":\"high\",\"to\":\"dWgYhpYI248:APA91bEBJ5Kkq_015lZ_UX1V-0S0VbhDFyMTmZSs0he5_TKM252LA80Fek8yCy5FMkrvAcxB4dDzVLUWBWmCJqTJRhk8gOZWJjL3sEEjP0XJZnNRiqtMNSRYP13ndaUljRgOhG1o-ym4\"}";
+	std::string json_message = R"(
+{
+	"data" : { "viesti" : "l33t" },
+	"priority" : "high",
+	"to" : "dWgYhpYI248:APA91bEBJ5Kkq_015lZ_UX1V-0S0VbhDFyMTmZSs0he5_TKM252LA80Fek8yCy5FMkrvAcxB4dDzVLUWBWmCJqTJRhk8gOZWJjL3sEEjP0XJZnNRiqtMNSRYP13ndaUljRgOhG1o-ym4"
+}
+	)";
 
-	request_string << "POST /fcm/send HTTP/1.1\r\n";
-	request_string << "Host:fcm.googleapis.com:443\r\n";
-	request_string << "User-Agent: C/1.0\r\n";
-	request_string << "Content-Type: application/json\r\n";
-	request_string << "Authorization:key=" << auth_key_ << "\r\n";
-	request_string << "Sender: key= 596859909382\r\n";
-	request_string << "Accept: */*\r\n";
-	request_string << "Content-Length: " << jsontemp.str().length() << "\r\n\r\n";
-	request_string << jsontemp.str();
+	std::string http_header = "POST /fcm/send HTTP/1.1\r\n\
+Host: fcm.googleapis.com:443\r\n\
+User-Agent: C/1.0\r\n\
+Content-Type: application/json\r\n\
+Authorization: key=" + auth_key_ + "\r\n\
+Sender: key=596859909382\r\n\
+Accept: */*\r\n\
+Content-Length: " + std::to_string(json_message.length()) + "\r\n\r\n";
 
-	request_stream << request_string.str();
+	request_stream << http_header << json_message;
 
 	// Send the request.
 	asio::write(sock, request);
 
-	std::cout << request_string.str() << "\n";
+	std::cout << http_header << json_message << "\n";
 
 	std::cout << "#####request sent#####\n";
         // Read the response status line.

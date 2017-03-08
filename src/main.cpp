@@ -86,8 +86,7 @@ int main(int argc, char **argv)
 
         if (inotify.poll_events())
         {
-            inotify::Event event;
-            while (inotify.get_event(&event))
+            while (auto event = inotify.get_event())
             {
                 if (event.mask & IN_MODIFY)
                     ; // uus puhelin tullu, lisätään se johonki ylös että saadaan sinnekki ilmotukset lähetttyä

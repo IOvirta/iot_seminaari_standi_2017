@@ -3,10 +3,13 @@ project(iovirta_iot_serveri)
 
 include_directories(inc)
 
-set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp)
+set(SOURCES src/main.cpp src/conf/conf.cpp src/video/camera.cpp src/network/fcm_server.cpp)
 
 find_package(OpenCV REQUIRED)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 add_executable(iovirta_iot ${SOURCES})
-target_link_libraries(iovirta_iot ${OpenCV_LIBS})
+target_link_libraries(iovirta_iot ${OpenCV_LIBS} ${OpenSSL_LIBS} Threads::Threads ssl crypto)
 set_property(TARGET iovirta_iot PROPERTY CXX_STANDARD 14)
+add_definitions(-DASIO_STANDALONE)

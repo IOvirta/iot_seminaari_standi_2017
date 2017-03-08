@@ -5,6 +5,8 @@
 
 #include "inotify++.hpp"
 
+#include <asio.hpp>
+
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
 #include "network/fcm_server.hpp"
@@ -102,6 +104,19 @@ int main(int argc, char **argv)
     //fwrite("quit", 1, 4, vconcat);
     //pclose(vconcat);
     //pclose(ffmpeg);
+
+    iovirta_iot::network::FCMServer fcmserver = iovirta_iot::network::FCMServer();
+
+	try
+	{
+		//io_service.run();
+		fcmserver.send();
+		std::cout << "Script completed\n";
+	}
+	catch(std::exception& e){
+		std::cerr << e.what() << std::endl;
+		std::cout << "error\n";
+	}
 
     return 0;
 }

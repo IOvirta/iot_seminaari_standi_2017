@@ -41,4 +41,9 @@ bin/CMakeCache.txt
 bin/CMakeFiles/
 bin/Makefile
 bin/cmake_install.cmake
+bin/iovirta_iot#
+CMakeCache.txt
+CMakeFiles/*
+cmake_install.cmake
 bin/iovirta_iot
+iovirta_iot

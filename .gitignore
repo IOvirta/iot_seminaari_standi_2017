@@ -46,3 +46,4 @@ CMakeCache.txt
 CMakeFiles/*
 cmake_install.cmake
 bin/iovirta_iot
+iovirta_iot

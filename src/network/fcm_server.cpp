@@ -98,9 +98,9 @@ void FCMServer::send(){
   }
 
   // Read until EOF, writing data to output as we go.
-  while(asio::read(sock, response, asio::transfer_at_least(1))){
-      std::cout << &response; // don't want to print just return
-  }
+  //while(asio::read(sock, response, asio::transfer_at_least(1))){
+      //std::cout << &response; // don't want to print just return
+  //}
 
 
 

@@ -15,7 +15,7 @@ namespace ssl = asio::ssl;
 typedef ssl::stream<tcp::socket> ssl_socket;
 
 FCMServer::FCMServer(){
-	
+
 }
 
 void FCMServer::add_client(const std::string &token)
@@ -61,13 +61,13 @@ void FCMServer::send(){
 	std::ostream request_stream(&request);
 
 	std::stringstream jsontemp;
-	jsontemp << "{\"data\":{\"viesti\": \"l33t\"},\"to\":\"dWgYhpYI248:APA91bEBJ5Kkq_015lZ_UX1V-0S0VbhDFyMTmZSs0he5_TKM252LA80Fek8yCy5FMkrvAcxB4dDzVLUWBWmCJqTJRhk8gOZWJjL3sEEjP0XJZnNRiqtMNSRYP13ndaUljRgOhG1o-ym4\"}";
+	jsontemp << "{\"data\":{\"viesti\": \"l33t\"},\"priority\":\"high\",\"to\":\"dWgYhpYI248:APA91bEBJ5Kkq_015lZ_UX1V-0S0VbhDFyMTmZSs0he5_TKM252LA80Fek8yCy5FMkrvAcxB4dDzVLUWBWmCJqTJRhk8gOZWJjL3sEEjP0XJZnNRiqtMNSRYP13ndaUljRgOhG1o-ym4\"}";
 
 	request_string << "POST /fcm/send HTTP/1.1\r\n";
 	request_string << "Host:fcm.googleapis.com:443\r\n";
 	request_string << "User-Agent: C/1.0\r\n";
 	request_string << "Content-Type: application/json\r\n";
-	request_string << "Authorization:key=AAAAivefdQY:APA91bGBjV976NHvlV5cSNHp80O-VNYDGF8kJbfBGi_W8iTKh_SsIuRunA615XV_FZ7-LAZgmxcKs1ZZS2GSRmyiPLcQ31PxT0tStPzaG_yvVDJOtza30fuUU9U9rELyB-ZucpIyiLLh\r\n";
+	request_string << "Authorization:key=" << auth_key_ << "\r\n";
 	request_string << "Sender: key= 596859909382\r\n";
 	request_string << "Accept: */*\r\n";
 	request_string << "Content-Length: " << jsontemp.str().length() << "\r\n\r\n";

@@ -1,5 +1,9 @@
 #include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <fstream>
 #include <vector>
+#include <string>
 #include <chrono>
 #include <cstdio>
 
@@ -10,8 +14,6 @@
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
 #include "network/fcm_server.hpp"
-
-
 
 int main(int argc, char **argv)
 {
@@ -48,8 +50,27 @@ int main(int argc, char **argv)
     {
         std::cerr << ".....todo" << std::endl;
     }*/
+
+    std::vector<std::string> client_tokens;
+
+    {
+        /* luetaan puhelinten tokenit */
+        std::ifstream is(conf.get<std::string>("locations", "tokens"));
+        if (!is.is_open())
+        {
+            std::cerr << "avainlistan '" <<  conf.get<std::string>("locations", "tokens") << "' avaus epäonnistui, onko conffissa oikein?" << std::endl;
+            return 1;
+        }
+        std::copy(std::istream_iterator<std::string>(is), std::istream_iterator<std::string>(), std::back_inserter(client_tokens));
+    }
+
+    for (auto &token : client_tokens)
+        fcm_server.add_client(token);
+
+
+    /* inotifylla saadaan tietää jos tiedostoissa/kansioissa tapahtuu muutoksia */
     inotify::Inotify inotify;
-    //inotify.add_watch(conf.get<std::string>("locations", "tokens"), IN_MODIFY);
+    inotify.add_watch(conf.get<std::string>("locations", "tokens"), IN_MODIFY);
     //inotify.add_watch(conf.get<std::string>("locations", "hls"), IN_CREATE);
 
 
@@ -68,7 +89,7 @@ int main(int argc, char **argv)
         {
             if (!movement)
             {
-                // liike alkoi, TODO ilmotus puhelimelle
+                fcm_server.send();
                 movement = true;
                 std::cout << "alkoi" << std::endl;
                 //std::string vconcat_add_cmd = "add "; /*+ uusin kokonainen video */
@@ -86,12 +107,28 @@ int main(int argc, char **argv)
         }
         //fwrite(camera.frame_.data, sizeof(unsigned char), frame_size, ffmpeg);
 
+        /* kysytään inotifyltä onko uusia muutoksia tarkailtavissa tiedostoissa */
         if (inotify.poll_events())
         {
             while (auto event = inotify.get_event())
             {
                 if (event.mask & IN_MODIFY)
-                    ; // uus puhelin tullu, lisätään se johonki ylös että saadaan sinnekki ilmotukset lähetttyä
+                {
+                    /* uuden puhelimen tokeni tullut, otetaan se muistiin */
+                    std::vector<std::string> tokens_tmp;
+                    std::ifstream is(conf.get<std::string>("locations", "tokens"));
+                    if (!is.is_open())
+                    {
+                        /**/
+                    }
+                    std::copy(std::istream_iterator<std::string>(is), std::istream_iterator<std::string>(), std::back_inserter(tokens_tmp));
+                    /* lisätään kaikki uudet tokenit fcm lähettäjälle (fcm_server)*/
+                    for (auto it = tokens_tmp.begin() + client_tokens.size(); it != tokens_tmp.end(); ++it)
+                    {
+                        client_tokens.push_back(*it);
+                        fcm_server.add_client(*it);
+                    }
+                }
                 if (event.mask & IN_CREATE)
                 {
                     /* uus videon pätkä tullut, otetaan sen nimi ylös ja merkataan
@@ -105,7 +142,7 @@ int main(int argc, char **argv)
     //pclose(vconcat);
     //pclose(ffmpeg);
 
-    iovirta_iot::network::FCMServer fcmserver;
+    /*iovirta_iot::network::FCMServer fcmserver;
 
 	try
 	{
@@ -116,7 +153,7 @@ int main(int argc, char **argv)
 	catch(std::exception& e){
 		std::cerr << e.what() << std::endl;
 		std::cout << "error\n";
-	}
+	}*/
 
     return 0;
 }

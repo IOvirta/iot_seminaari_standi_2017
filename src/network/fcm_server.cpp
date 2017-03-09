@@ -44,14 +44,6 @@ void FCMServer::send(){
 	sock.set_verify_callback(ssl::rfc2818_verification("fcm.googleapis.com"));
 	sock.handshake(ssl_socket::client);
 
-	/* "dry_run = true -> viestejä ei lähetetä puhelimille */
-	std::string fcm_request = R"(
-{
-	"data" : { "viesti" : "l33t" },
-	"priority" : "high",
-	"dry_run" : true,
-	"registration_ids" : [)";
-
 	static std::string http_header = "POST /fcm/send HTTP/1.1\r\n\
 Host: fcm.googleapis.com:443\r\n\
 User-Agent: C/1.0\r\n\
@@ -61,6 +53,15 @@ Sender: key=596859909382\r\n\
 Accept: */*\r\n\
 Content-Length: ";
 
+	/* "dry_run" = true -> viestejä ei lähetetä puhelimille */
+	std::string fcm_request = R"(
+{
+	"data" : { "viesti" : "l33t" },
+	"priority" : "high",
+	"dry_run" : true,
+	"registration_ids" : [)";
+
+	/* lisätään kaikkien puhelinten tokenit pyyntöön */
 	for (auto it = client_tokens_.begin(); it != client_tokens_.end(); ++it)
 	{
 		fcm_request += "\"" + *it + "\"";

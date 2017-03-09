@@ -25,6 +25,15 @@ import android.widget.TextView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static com.iovirta.iot_kamera_sovellus.MainActivity.EXTRA_MESSAGE;
 
 
@@ -47,26 +56,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
 
 
-        // 1. create an intent pass class name or intnet action name
-        Intent intent = new Intent(this, MainActivity.class);
-
-        // 2. put key/value data
-        intent.putExtra("token", refreshedToken);
-
-        // 3. or you can add data to a bundle
-        Bundle extras = new Bundle();
-        extras.putString("token2", refreshedToken);
-
-        // 4. add bundle to intent
-        intent.putExtras(extras);
-
-        // 5. start the activity
-        startActivity(intent);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        //sendRegistrationToServer(refreshedToken);
+        sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]
 
@@ -80,7 +74,46 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
+
+    private String readStream(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader r = new BufferedReader(new InputStreamReader(is),1000);
+        for (String line = r.readLine(); line != null; line =r.readLine()){
+            sb.append(line);
+        }
+        is.close();
+        return sb.toString();
     }
+
+    private void sendRegistrationToServer(String token) {
+        URL url = null;
+        try {
+            url = new URL("http://avaruuskeskittyma.cf:7755/avaimen_tallennus.php?key="+token);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InputStream in = null;
+        try {
+            in = new BufferedInputStream(urlConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            readStream(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            urlConnection.disconnect();
+        }
+    }
+
+
 }

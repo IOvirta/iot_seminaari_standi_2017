@@ -96,7 +96,7 @@ public:
             if (child->name == name)
                 return child;
 
-        throw std::runtime_error("Tree: invalid child");
+        throw std::runtime_error("'" + name + "' not found");
     }
 
     Node<KeyType, ValueType> *get(Node<KeyType, ValueType> *node, KeyType name) const
@@ -106,7 +106,7 @@ public:
         if (node->name == name)
             return node;
 
-        throw std::runtime_error("Tree: invalid path2");
+        throw std::runtime_error("'" + name + "' not found");
     }
 
     template <typename... Path>
@@ -118,7 +118,7 @@ public:
             return get(node, path...);
 
         // error
-        throw std::runtime_error("Tree: invalid path1");
+        throw std::runtime_error("'" + name + "' not found");
     }
 
     /*ValueType get(KeyType name) const

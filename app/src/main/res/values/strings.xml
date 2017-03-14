@@ -3,7 +3,15 @@
     <string name="action_settings">Settings</string>
     <string name="button_send">Open Video in webview</string>
     <string name="button_launch_mediView">Open Video in Mediaview</string>
-    <string name="mainactivity_headertext">IOVirta IOT Surveillance system 0.2</string>
+    <string name="mainactivity_headerfirstline">IOT Camera Surveillance demo</string>
+    <string name="mainactivity_headersecondline">Presented by members of IOVirta.</string>
+    <string name="mainactivity_makerfront">Tomi Mäkinen</string>
+    <string name="mainactivity_front">Frontend\nFront-Back Firebase communication\nHardware\nVersion control (Github)</string>
+    <string name="mainactivity_makerback">Pietari Noeskoski</string>
+    <string name="mainactivity_back">Backend\nVideo-processing\nMotion detection\nVideo-streaming\n</string>
     <string name="mediview_header">Surveillance mode</string>
+    <string name="SurveillanceOpenButton">Enter surveillance mode</string>
+    <string name="loadingvideo">Loading video stream...\n If this persists, there is something wrong with the camera or connection.</string>
+    <string name="openjsontempbutton">Open Json</string>
     @string/button_launch_mediView
 </resources>

@@ -69,42 +69,55 @@
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp" />
 
-        <ScrollView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/button2">
+            android:layout_height="wrap_content"
+            android:id="@+id/makerslayout"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
+            android:baselineAligned="false"
+            android:layout_alignParentBottom="true">
 
-
-            <LinearLayout
+            <TextView
+                android:text="@string/mainactivity_makerfront"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:id="@+id/textView3"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+                android:paddingLeft="@dimen/mainactivity_makers" />
 
-                <Button
-                    android:text="@string/openjsontempbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button4"
-                    android:onClick="openJsonView"
-                    android:gravity="center"
-                    android:layout_centerInParent="false"
-                    android:layout_above="@+id/makerslayout"
-                    android:layout_below="@+id/captionlayout"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                tools:text="@string/mainactivity_front"
+                android:paddingLeft="@dimen/mainactivity_frontandback_captions"
+                android:text="@string/mainactivity_front" />
 
-                    android:textColor="#FFFFFF"
-                    android:textSize="10pt"
-                    android:background="@drawable/buttonshape"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp" />
-            </LinearLayout>
-        </ScrollView>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mainactivity_makers" />
 
+            <TextView
+                android:text="@string/mainactivity_makerback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+                android:paddingLeft="@dimen/mainactivity_makers" />
+
+            <TextView
+                android:text="@string/mainactivity_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                tools:text="@string/mainactivity_back"
+                android:paddingLeft="@dimen/mainactivity_frontandback_captions" />
+        </LinearLayout>
     </RelativeLayout>
 
 

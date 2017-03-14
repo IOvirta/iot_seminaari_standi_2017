@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="mainactivity_frontandback_captions">24dp</dimen>
+    <dimen name="mainactivity_makers">12dp</dimen>
+    <dimen name="mainactivity_button_verticalmargin">24dp</dimen>
+    <dimen name="mainactivity_buttonhorizontalpadding">24dp</dimen>
 </resources>

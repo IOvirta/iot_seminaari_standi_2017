@@ -46,64 +46,82 @@
 
         </LinearLayout>
 
-        <Button
-            android:text="@string/SurveillanceOpenButton"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/button2"
-            android:onClick="openMediaView"
-            android:gravity="center"
-            android:layout_centerInParent="false"
-            android:layout_above="@+id/makerslayout"
             android:layout_below="@+id/captionlayout"
+            android:id="@+id/mainActButtonsLayout"
+            android:paddingTop="@dimen/mainAct_button_ver_divider"
+            android:paddingBottom="@dimen/mainAct_button_ver_divider">
 
-            android:textColor="#FFFFFF"
-            android:textSize="10pt"
-            android:background="@drawable/buttonshape"
-            android:shadowColor="#A8A8A8"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="5"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/button2">
-
-
-            <LinearLayout
+            <Button
+                android:text="@string/SurveillanceOpenButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:layout_height="match_parent"
+                android:id="@+id/launcSurveillanceModeBut"
+                android:onClick="openMediaView"
+                android:gravity="center"
+                android:layout_centerInParent="false"
+                android:layout_above="@+id/makerslayout"
+                android:layout_below="@+id/captionlayout"
 
-                <Button
-                    android:text="@string/openjsontempbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button4"
-                    android:onClick="openJsonView"
-                    android:gravity="center"
-                    android:layout_centerInParent="false"
-                    android:layout_above="@+id/makerslayout"
-                    android:layout_below="@+id/captionlayout"
+                android:textColor="#FFFFFF"
+                android:textSize="10pt"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/mainAct_button_margin"
+                android:layout_marginRight="@dimen/mainAct_button_margin" />
+            <!-- Open credits!-->
+            <Button
+                android:text="@string/mainAct_open_credits_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/launcCreditsBut"
+                android:onClick="openMediaView"
+                android:gravity="center"
+                android:layout_centerInParent="false"
+                android:layout_above="@+id/makerslayout"
+                android:layout_below="@+id/captionlayout"
 
-                    android:textColor="#FFFFFF"
-                    android:textSize="10pt"
-                    android:background="@drawable/buttonshape"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp" />
-            </LinearLayout>
-        </ScrollView>
+                android:textColor="#FFFFFF"
+                android:textSize="10pt"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/mainAct_button_margin"
+                android:layout_marginRight="@dimen/mainAct_button_margin" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="@string/video_recordings_header"
+            android:ems="10"
+            android:id="@+id/videorecordingsheader"
+            android:layout_below="@+id/mainActButtonsLayout"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="30sp"
+            android:paddingLeft="@dimen/mainAct_leftPadding" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/videorecordingsheader"
+            android:id="@+id/videolist_listview"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@android:color/holo_blue_dark"
+            android:layout_margin="@dimen/mainact_videoListpad" />
 
     </RelativeLayout>
 

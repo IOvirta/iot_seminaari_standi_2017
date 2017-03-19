@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="Make_it_blackey">#03040c</color>
+    <color name="gray" >#cccccc</color>
+    <color name="white" >#ffffff</color>
 </resources>

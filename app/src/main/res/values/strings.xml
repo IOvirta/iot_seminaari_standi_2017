@@ -13,5 +13,10 @@
     <string name="SurveillanceOpenButton">Enter surveillance mode</string>
     <string name="loadingvideo">Loading video stream...\n If this persists, there is something wrong with the camera or connection.</string>
     <string name="openjsontempbutton">Open Json</string>
+    <string name="VideListEntryButton">Play</string>
+    <string name="mainAct_open_credits_button">Open credits</string>
+    <string name="video_recordings_header">Video recordings</string>
+    <string name="mediaview_playing_video">Playback</string>
+    <string name="APPTITLE">Iot Cam Demo</string>
     @string/button_launch_mediView
 </resources>

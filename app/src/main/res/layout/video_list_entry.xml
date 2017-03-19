@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/videolistentry_margin">
+
+
+    <TextView
+        android:id="@+id/vle_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12.03.2017 13:34:19"
+        android:textSize="26sp"
+        android:layout_alignParentTop="false"
+        android:layout_marginLeft="@dimen/videolistentry_margin"
+        android:layout_marginRight="@dimen/videolistentry_margin"
+        android:layout_centerInParent="false"
+        android:layout_toLeftOf="@+id/vle_button"
+        android:textColor="@color/gray"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:text="@string/VideListEntryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vle_button"
+        android:background="@android:drawable/ic_media_play"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/vle_buttonpad"
+        android:layout_marginRight="@dimen/mainAct_leftPadding" />
+
+
+</RelativeLayout>

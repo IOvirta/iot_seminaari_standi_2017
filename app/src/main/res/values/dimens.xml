@@ -7,4 +7,10 @@
     <dimen name="mainactivity_makers">12dp</dimen>
     <dimen name="mainactivity_button_verticalmargin">24dp</dimen>
     <dimen name="mainactivity_buttonhorizontalpadding">24dp</dimen>
+    <dimen name="videolistentry_margin">12dp</dimen>
+    <dimen name="mainAct_button_margin">8dp</dimen>
+    <dimen name="mainAct_button_ver_divider">18dp</dimen>
+    <dimen name="mainAct_leftPadding">12dp</dimen>
+    <dimen name="mainact_videoListpad">6dp</dimen>
+    <dimen name="vle_buttonpad">20dp</dimen>
 </resources>

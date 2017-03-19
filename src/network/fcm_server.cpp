@@ -1,4 +1,3 @@
-#include <iostream>
 #include <ostream>
 #include <string>
 
@@ -87,10 +86,10 @@ Content-Length: ";
 	unsigned int status_code;
 	response_stream >> status_code;
 
-	std::cout << http_version;
+	/*std::cout << http_version;
 	std::cout << "\n";
 	std::cout << status_code;
-	std::cout << "\n";
+	std::cout << "\n";*/
 
 	  // Read the response headers, which are terminated by a blank line.
 	  asio::read_until(sock, response, "\r\n\r\n");
@@ -100,6 +99,6 @@ Content-Length: ";
 		  std::ostringstream oss;
 		  oss << &response;
 		  std::string res = oss.str();
-				std::cout << res;
+		//		std::cout << res;
 	  }
 }

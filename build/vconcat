@@ -1,0 +1,63 @@
+#!/bin/bash
+
+function concat_video
+{
+    video_output_file=$(date +%y%m%d_%H%M%S.mkv);
+    ffmpeg -f concat -safe 0 -i $VIDEOLIST_FILE -c copy $OUTPUT_DIR/$video_output_file
+}
+
+function add_video
+{
+    cp "$INPUT_DIR/$1" "$TMPDIR/$1"
+    echo "file '$1'" >> $VIDEOLIST_FILE
+}
+
+while [[ $# -gt 1 ]]
+do
+    key="$1"
+    case $key in
+        -o|--output-dir)
+            OUTPUT_DIR="$2"
+            shift
+            ;;
+        -i|--input-dir)
+            INPUT_DIR="$2"
+            shift
+            ;;
+        -l|--log)
+            LOG_FILE="$2"
+            shift
+            ;;
+        *)
+            ;;
+    esac
+    shift
+done
+
+FILES=()
+TMPDIR=$(mktemp -d .tmp.iovirtaXXXXXXXXXXXX)
+VIDEOLIST_FILE=$(mktemp -p $TMPDIR tmp.iovirta_ffmpegXXXXXXXXXXXX)
+
+while read -a input
+do
+    for ((i=0; i < ${#input[@]}; i++));
+    do
+        case ${input[$i]]} in
+            add)
+                add_video "${input[$i+1]}"
+                i=$i+1
+                ;;
+            concat)
+                concat_video
+                FILES=()
+                echo "" > $VIDEOLIST_FILE
+                ;;
+            quit)
+                rm -r $TMPDIR
+                exit
+                ;;
+            *)
+                ;;
+        esac
+    done
+done

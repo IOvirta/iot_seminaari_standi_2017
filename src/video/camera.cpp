@@ -30,15 +30,14 @@ bool iovirta_iot::video::Camera::check_motion()
 
     cv::Mat mask;
     cv::threshold(diff, mask, 30, 255, CV_THRESH_BINARY);
-    frame_ = mask.clone();
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(mask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
     if (contours.size() > 0)
-        frame_count_ = (frame_count_ == 50 ? 50 : frame_count_ + 1);
+        frame_count_ = (frame_count_ == 25 ? 25 : frame_count_ + 1);
     else
-        frame_count_ = (frame_count_ < 10 ? 0 : frame_count_ - 1);
+        frame_count_ = (frame_count_ <= 10 ? 0 : frame_count_ - 1);
 
     prev_gray_ = gray.clone();
 

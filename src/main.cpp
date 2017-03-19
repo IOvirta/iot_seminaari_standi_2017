@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <sstream>
+#include <iomanip>
 #include <cstdio>
 
 #include "inotify++.hpp"
@@ -14,6 +16,8 @@
 #include "conf/conf.hpp"
 #include "video/camera.hpp"
 #include "network/fcm_server.hpp"
+
+std::string current_time(const std::string &format);
 
 int main(int argc, char **argv)
 {
@@ -44,12 +48,12 @@ int main(int argc, char **argv)
     //{
     //    std::cerr << "ffmpeg popen" << std::endl;
     //    return 1;
-    //}             vconcatille -i kansio_missä_videot ja -o kansio_mihin_videot
-    /*std::FILE *vconcat = popen(conf.get<std::string>("locations", "vconcat").c_str(), "w");
+    //}             vconcatille -i kansio_missä_videot ja -o kansio_mihin_videot TODO <<<--------
+    std::FILE *vconcat = popen(conf.get<std::string>("locations", "vconcat").c_str(), "w");
     if (vconcat == nullptr)
     {
         std::cerr << ".....todo" << std::endl;
-    }*/
+    }
 
     std::vector<std::string> client_tokens;
 
@@ -71,15 +75,20 @@ int main(int argc, char **argv)
     /* inotifylla saadaan tietää jos tiedostoissa/kansioissa tapahtuu muutoksia */
     inotify::Inotify inotify;
     inotify.add_watch(conf.get<std::string>("locations", "tokens"), IN_MODIFY);
-    //inotify.add_watch(conf.get<std::string>("locations", "hls"), IN_CREATE);
+    inotify.add_watch(conf.get<std::string>("locations", "hls"), IN_CREATE);
 
-
+    cv::namedWindow("video");
     bool movement = false;
 
-    int frame_size = camera.width() * camera.height() * 3;
-    long long sum = 0;
-    //while (true)
-    for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
+    auto movement_stop_time = std::chrono::system_clock::now();
+    bool asddsa = false; // joku kuvaavampi nimi
+
+    std::string latest_video = "";
+    std::string latest_full_video = "";
+
+
+    while (true)
+    //for (int i = 0; i < conf.get<int>("test", "frameja"); i++)
     {
         if (!camera.capture_frame())
         { /* ei saatu kuvaa */ break;}
@@ -89,22 +98,46 @@ int main(int argc, char **argv)
         {
             if (!movement)
             {
-                fcm_server.send();
+                /* liike alkoi */
                 movement = true;
                 std::cout << "alkoi" << std::endl;
-                //std::string vconcat_add_cmd = "add "; /*+ uusin kokonainen video */
+
+                std::string vconcat_cmd = "add " + conf.get<std::string>("locations", "hls") + latest_full_video;
+                fwrite(vconcat_cmd.c_str(), 1, vconcat_cmd.length(), vconcat);
+                std::cout << vconcat_cmd << std::endl;
             }
         }
         else
         {
             if (movement)
             {
-                // liike loppui
-
-                std::cout << "loppui" << std::endl;
+                std::cout << "ajanotto alotettu" << std::endl;
+                asddsa = true;
                 movement = false;
+                movement_stop_time = std::chrono::system_clock::now();
             }
         }
+
+        if (!movement && asddsa)
+        {
+            auto seconds = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - movement_stop_time).count();
+
+            if (seconds >= 5)
+            {
+                asddsa = false;
+                fwrite("concat", 1, 6, vconcat);
+                std::cout << "loppui" << std::endl;
+            }
+        }
+
+        std::string timestamp = current_time("%d.%m.%y %T");
+        auto timestamp_size = cv::getTextSize(timestamp, CV_FONT_HERSHEY_SIMPLEX, 1, 3, nullptr);
+        cv::putText(camera.frame_, timestamp, {camera.width() - timestamp_size.width - 10, camera.height() - timestamp_size.height},
+            CV_FONT_HERSHEY_SIMPLEX,1, cv::Scalar::all(255));
+
+
+        cv::imshow("video", camera.frame_);
+        cv::waitKey(1);
         //fwrite(camera.frame_.data, sizeof(unsigned char), frame_size, ffmpeg);
 
         /* kysytään inotifyltä onko uusia muutoksia tarkailtavissa tiedostoissa */
@@ -117,11 +150,9 @@ int main(int argc, char **argv)
                     /* uuden puhelimen tokeni tullut, otetaan se muistiin */
                     std::vector<std::string> tokens_tmp;
                     std::ifstream is(conf.get<std::string>("locations", "tokens"));
-                    if (!is.is_open())
-                    {
-                        /**/
-                    }
+
                     std::copy(std::istream_iterator<std::string>(is), std::istream_iterator<std::string>(), std::back_inserter(tokens_tmp));
+
                     /* lisätään kaikki uudet tokenit fcm lähettäjälle (fcm_server)*/
                     for (auto it = tokens_tmp.begin() + client_tokens.size(); it != tokens_tmp.end(); ++it)
                     {
@@ -134,6 +165,8 @@ int main(int argc, char **argv)
                     /* uus videon pätkä tullut, otetaan sen nimi ylös ja merkataan
                        edellinen video uusimmaks (koska tää uus video ei oo vielä kokonainen)
                      */
+                     latest_full_video = latest_video;
+                     latest_video = event.name;
                 }
             }
         }
@@ -156,4 +189,14 @@ int main(int argc, char **argv)
 	}*/
 
     return 0;
+}
+
+std::string current_time(const std::string &format)
+{
+    auto now = std::chrono::system_clock::now();
+    auto now_time_t = std::chrono::system_clock::to_time_t(now);
+
+    std::stringstream time_ss;
+    time_ss << std::put_time(std::localtime(&now_time_t), format.c_str());
+    return time_ss.str();
 }

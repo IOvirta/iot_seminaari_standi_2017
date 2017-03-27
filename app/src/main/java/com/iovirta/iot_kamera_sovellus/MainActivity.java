@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
         mainUIHandler = new Handler() {
 
             @Override
@@ -71,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    /** Called when the user clicks the Send button */
+    public void openCreditsView(View view) {
+        Intent intent = new Intent(this, credits.class);
+        startActivity(intent);
+
+    }
 
     public void openMediaViewWithUrl(View view, String url) {
         //Get the base of url
@@ -85,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean populateUsersList() {
 
         if(!AppData.getInstance().isVideoList_json_loaded()){
+            TextView videoRecordinstext = (TextView)findViewById(R.id.videorecordingsheader);
+            videoRecordinstext.setText(getResources().getText(R.string.video_recordings_header_novideos));
             return false;
         }
 

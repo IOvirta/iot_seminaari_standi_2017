@@ -39,7 +39,7 @@ class JsonDownloader extends AsyncTask<Void,Void,Integer>
     protected Integer doInBackground(Void... param) {
         try {
             Log.d("json", "entering json download");
-            URL url = new URL("http://avaruuskeskittyma.cf:7755/listvideos.php");
+            URL url = new URL("http://10.10.206.228:7755/listvideos.php");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             String responseMsg = con.getResponseMessage();
@@ -64,28 +64,38 @@ class JsonDownloader extends AsyncTask<Void,Void,Integer>
 
                 JSONObject obj = new JSONObject(result.toString());
                 AppData.getInstance().setVideoList_json(obj);
-                AppData.getInstance().setVideoList_json_loaded(true);
 
                 //Log.d("json", AppData.getInstance().getVideoList_json().toString());
                 Log.d("json", "Json_downloaded: "+obj.toString());
 
                 String baseurl = obj.getString("urlbase");
+                String status = obj.getString("status");
                 AppData.getInstance().setVideoBaseUrl(baseurl);
 
-                ArrayList<VideoListEntry> videoListEntries = new ArrayList<VideoListEntry>();
+                AppData.getInstance().setVideoList_json_loaded(false);
 
-                //Videolist from JSON
-                JSONArray videosArr = obj.getJSONArray("videos");
-                for (int i = 0; i < videosArr.length(); i++) {
-                    JSONObject obj_ = videosArr.getJSONObject(i);
-                    //Whole path to video
-                    String url_ =   "http://"+baseurl + obj_.getString("url"); //huom "/"-merkki
-                    String date_ =  obj_.getString("date");
-                    VideoListEntry newVideo = new VideoListEntry(url_, date_);
-                    videoListEntries.add(newVideo);
+                //Saatiinko video listaus
+                if(status.equals("OK")) {
+
+                    ArrayList<VideoListEntry> videoListEntries = new ArrayList<VideoListEntry>();
+
+                    //Videolist from JSON
+                    JSONArray videosArr = obj.getJSONArray("videos");
+                    for (int i = 0; i < videosArr.length(); i++) {
+                        JSONObject obj_ = videosArr.getJSONObject(i);
+                        //Whole path to video
+                        String url_ = "http://" + baseurl + obj_.getString("url"); //huom "/"-merkki
+                        String date_ = obj_.getString("date");
+                        VideoListEntry newVideo = new VideoListEntry(url_, date_);
+                        videoListEntries.add(newVideo);
+                    }
+
+                    AppData.getInstance().setVideoListEntries(videoListEntries);
+                    AppData.getInstance().setVideoList_json_loaded(true);
+                }else{
+                    Log.e("json", "No videos present.");
+                    Log.d("json", "Status: "+status);
                 }
-
-                AppData.getInstance().setVideoListEntries(videoListEntries);
 
             } catch (JSONException e) {
                 e.printStackTrace();

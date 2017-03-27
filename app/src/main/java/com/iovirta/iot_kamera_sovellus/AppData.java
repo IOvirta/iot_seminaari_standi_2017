@@ -3,6 +3,7 @@ package com.iovirta.iot_kamera_sovellus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * Created by rytai on 15.3.2017.
@@ -16,6 +17,7 @@ public class AppData {
     private ArrayList<VideoListEntry> videoListEntries;
 
     private String videoBaseUrl;
+    private long LastTimeUpdateMillis = 0;
 
     public JSONObject getVideoList_json() {
         return videoList_json;
@@ -52,6 +54,14 @@ public class AppData {
 
     public void setVideoBaseUrl(String videoBaseUrl) {
         this.videoBaseUrl = videoBaseUrl;
+    }
+
+    public long getLastTimeUpdateMillis() {
+        return LastTimeUpdateMillis;
+    }
+
+    public void setLastTimeUpdateMillis(long lastTimeUpdateMillis) {
+        LastTimeUpdateMillis = lastTimeUpdateMillis;
     }
     //MyProperties.getInstance().someValueIWantToKeep
 }

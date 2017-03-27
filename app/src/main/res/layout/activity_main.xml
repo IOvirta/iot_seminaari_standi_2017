@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/launcCreditsBut"
-                android:onClick="openMediaView"
+                android:onClick="openCreditsView"
                 android:gravity="center"
                 android:layout_centerInParent="false"
                 android:layout_above="@+id/makerslayout"

@@ -28,7 +28,8 @@ public class mediaView extends AppCompatActivity {
         myVideoView.setMediaController(mc);
         //urlStream = "http://bjuutro.dy.fi:8080/HLS/live.m3u8";
         //urlStream = "http://www.html5videoplayer.net/videos/toystory.mp4";
-        urlStream = "http://avaruuskeskittyma.cf:7755/hls/live.m3u8";
+        //urlStream = "http://avaruuskeskittyma.cf:7755/hls/live.m3u8";
+        urlStream = "http://10.10.206.228:7755/hls/live.m3u8";
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

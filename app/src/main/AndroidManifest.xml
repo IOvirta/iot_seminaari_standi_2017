@@ -18,7 +18,7 @@
         -->
         <meta-data
             android:name="com.iovirta.iot_kamera_sovellus.default_notification_icon"
-            android:resource="@drawable/ic_stat_ic_notification" />
+            android:resource="@drawable/cam" />
         <!--
              Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
@@ -59,7 +59,8 @@
 
         <activity android:name=".mediaView" />
         <activity android:name=".mediaView_from_url" />
-        <activity android:name=".jsontest"/>
+        <activity android:name=".jsontest" />
+        <activity android:name=".credits"></activity>
     </application>
 
 </manifest>

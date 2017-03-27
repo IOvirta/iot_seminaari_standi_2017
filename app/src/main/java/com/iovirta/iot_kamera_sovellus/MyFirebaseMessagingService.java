@@ -52,21 +52,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d("derp", "From: " + remoteMessage.getFrom());
+        Log.d("message", "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d("derp", "Message data payload: " + remoteMessage.getData());
+            Log.d("message", "Message data payload: " + remoteMessage.getData());
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d("derp", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.d("message", "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
-        sendNotification(remoteMessage.getData().get("viesti"));
+        //TODO: Kokeillaan, että onko kulunut tarpeeksi aikaa viime viestistä
+        long curTime = System.currentTimeMillis();
+        long lastUpdate = AppData.getInstance().getLastTimeUpdateMillis();
+        long timeSinceLastUpdate = curTime - lastUpdate;
+        if (timeSinceLastUpdate > 15000) {
+            Log.d("message", "message: showing notification");
+            AppData.getInstance().setLastTimeUpdateMillis(curTime);
+            sendNotification(remoteMessage.getData().get("viesti"));
+        }else{
+            Log.d("message","message: not enough time passed since last notification.");
+        }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -87,8 +96,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                .setContentTitle("FCM Viesti inc.")
-                .setContentText(messageBody)
+                .setContentTitle("Iot Cam Demo")
+                .setContentText("Liikettä havaittu!")
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
